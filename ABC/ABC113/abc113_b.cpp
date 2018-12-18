@@ -10,16 +10,16 @@ int main()
   std::cin >> T >> A;
   for ( int i = 0; i < N; i++ ) std::cin >> H[i];
 
-  int pos = 0;
-  int min = std::abs(A+H[0] * 0.006);
+  int pos = 1;
+  double min = std::abs(A - T + H[0] * 0.006);
   for ( int i = 1; i < N; i++ ) {
-    int dis = std::abs(A + H[i] * 0.006);
+    double dis = std::abs(A - T + H[i] * 0.006);
     if ( dis < min ) {
       min = dis;
-      pos = i;
+      pos = i + 1;
     }
   }
 
-  std::cout << pos + 1 << std::endl;
+  std::cout << pos << std::endl;
   return 0;
 }
