@@ -11,15 +11,17 @@ int main()
   std::sort(a, a + N);
   int ans = 0;
 
+  bool is_all = false;
   for ( int i = 0; i < N; i++ ) {
     if ( x >= a[i] ) {
       x -= a[i];
       ans++;
-    } 
+      if ( i == N - 1 ) is_all = true;
+    } else {
+      break;
+    }
   }
-  if ( x != 0 && ans > 0 ) {
-    ans--;
-  }
+  if ( x > 0 && is_all ) ans--;
 
   std::cout << ans << std::endl;
   return 0;
