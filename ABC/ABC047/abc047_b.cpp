@@ -32,7 +32,7 @@ int main()
     }
   }
 
-  int area = (W - origin_x) * (H - origin_y);
+  long area = (W - origin_x) * (H - origin_y);
   if ( area > 0 ) std::cout << area << std::endl;
   else std::cout << 0 << std::endl;
   return 0;
