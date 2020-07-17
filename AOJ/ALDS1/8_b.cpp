@@ -59,6 +59,79 @@ bool find(Node *root, int k) {
   return is_found;
 }
 
+void del(int k) {
+  Node* x = root; // deleted node
+  // find the node whose key is k
+  while (x != NIL) {
+    if (k < x->key) {
+      x = x->left;
+    } else if (k > x->key) {
+      x = x->right;
+    } else {
+      break;
+    }
+  }
+  if (x == NIL) return;
+
+  // whne the node has no children
+  if (x->right == NIL && x->left == NIL) {
+    Node* y = x->right;
+    if (x->parent == NIL) {
+      root = NIL;
+      return;
+    }
+    if (x->parent->left == x) {
+      x->parent->left = NIL;
+      x->parent = NIL;
+      return;
+    } else {
+      x->parent->right = NIL;
+      x->parent = NIL;
+      return;
+    }
+  } else if (x->right != NIL && x->left != NIL) {
+    Node* y = x->right;
+    while (y->left != NIL)  {
+      y = y->left;
+    }
+    if (y->right != NIL) {
+      y->parent->left = y->right;
+      y->right->parent = y->parent;
+      x->key = y->key;
+      return;
+    } else {
+      if (y->parent != x) {
+        y->parent->left = NIL;
+        x->key = y->key;
+        return;
+      } else {
+        x->key = y->key;
+        x->right = NIL;
+      }
+    }
+  } else {
+    if (x->left != NIL) {
+      x->left->parent = x->parent;
+      if (x->parent->left == x) {
+        x->parent->left = x->left;
+      } else {
+        x->parent->right = x->left;
+      }
+      x->left = NIL;
+      return;
+    } else{
+      x->right->parent = x->parent;
+      if (x->parent->left == x) {
+        x->parent->left = x->right;
+      } else {
+        x->parent->right = x->right;
+      }
+      x->right = NIL;
+      return;
+    }
+  }
+}
+
 void inorder(Node *u) {
   if (u == NIL) return;
   inorder(u->left);
@@ -96,6 +169,9 @@ int main() {
       } else {
         cout << "no" << endl;
       }
+    } else if (s == "delete") {
+      cin >> k;
+      del(k);
     }
   }
   return 0;
