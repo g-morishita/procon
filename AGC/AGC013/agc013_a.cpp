@@ -1,32 +1,37 @@
 #include <iostream>
-#include <algorithm>
+using namespace std;
 
-int main()
-{
-  long N;
-  std::cin >> N;
-  long long A[N];
+const int MAX = 100005;
 
-  for ( long i = 0; i < N; i++ ) std::cin >> A[i];
+int main() {
+  int A[MAX];
+  int N;
+  cin >> N;
+  for (int i = 0; i < N; i++) cin >> A[i];
 
-  long how_many = 1;
-  long index = 1;
-
-  while ( true ) {
-    long temp_i = index;
-    while (temp_i < N && A[temp_i] - A[temp_i-1] >= 0) {
-      temp_i++;
+  int num_divisions = 1;
+  int current_index = 1;
+  bool is_increasing = false;
+  while (current_index < N) {
+    while ((current_index < N) && (A[current_index] == A[current_index - 1])) {
+      current_index++;
     }
-    
-    long temp_j = index;
-    while (temp_j < N && A[temp_j] - A[temp_j-1] <= 0) {
-      temp_j++;
+    while ((current_index < N) &&  (A[current_index] - A[current_index - 1] >= 0)) {
+      is_increasing = true;
+      current_index++;
     }
-    index = std::max(temp_i, temp_j) + 1;
-    if ( index > N ) break;
-    how_many++;
+    if (!is_increasing) {
+      while ((current_index < N) && (A[current_index] - A[current_index - 1] <= 0)) {
+        current_index++;
+      }
+    }
+    if (current_index == N) {
+      break;
+    }
+    num_divisions++;
+    current_index++;
+    is_increasing = false;
   }
-
-  std::cout << how_many << "\n";
+  cout << num_divisions << endl;
   return 0;
 }
