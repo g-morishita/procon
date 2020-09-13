@@ -3,61 +3,58 @@
 using namespace std;
 
 const int MAX = 2000005;
-const int INFTY = (1 << 30);
-int H;
 
-void maxHeapify(int A[], int n, int i) {
-  int left_i = 2 * i;
-  int right_i = 2 * i + 1;
-  int largest_i {i};
-
-  if (left_i <= n && A[left_i] > A[i]) {
-    largest_i = left_i;
+void maxHeapify(int Heap[], int &h, int i) {
+  int largest = i;
+  if (i * 2 <= h && Heap[i * 2] > Heap[largest]) {
+    largest = i * 2;
   }
-
-  if (right_i <= n && A[right_i] > A[largest_i]) {
-    largest_i = right_i;
+  if (i * 2 + 1 <= h && Heap[i * 2 + 1] > Heap[largest]) {
+    largest = i * 2 + 1;
   }
-
-  if (largest_i != i) {
-    int tmp = A[i];
-    A[i] = A[largest_i];
-    A[largest_i] = tmp;
-    maxHeapify(A, n, largest_i);
+  if (largest != i) {
+    int tmp = Heap[i];
+    Heap[i] = Heap[largest];
+    Heap[largest] = tmp;
+    maxHeapify(Heap, h, largest);
   }
 }
 
-void heapIncreaseKey(int A[], int i, int key) {
-  A[i] = key;
-  while (i > 1 && A[i/2] < A[i]) {
-    int tmp = A[i];
-    A[i] = A[i/2];
-    A[i/2] = tmp;
-    i = i/2;
+void insert(int Heap[], int &h, int key) {
+  Heap[++h] =  key;
+  int i = h;
+  while (i > 1 && Heap[i] > Heap[i/2]) {
+    int tmp = Heap[i];
+    Heap[i] = Heap[i/2];
+    Heap[i/2] = tmp;
+    i /= 2;
   }
+}
+
+int extractMax(int Heap[], int &h) {
+  int max = Heap[1];
+  Heap[1] = Heap[h];
+  h--;
+  maxHeapify(Heap, h, 1);
+
+  return max;
 }
 
 int main() {
-  int A[MAX];
+  int Heap[MAX];
+  int h {0};
 
-  string command;
-  while (cin >> command) {
-    if (command == "insert") {
+  string s;
+  while (cin >> s) {
+    if (s == "insert") {
       int key;
       cin >> key;
-      H++;
-      A[H] = -INFTY;
-      heapIncreaseKey(A, H, key);
+      insert(Heap, h, key);
+    } else if (s == "extract") {
+      int m = extractMax(Heap, h);
+      cout << m << endl;
     }
-
-    if (command == "extract") {
-      cout << A[1] << endl;
-      A[1] = A[H];
-      H--;
-      maxHeapify(A, H, 1);
-    }
-    
-    if (command == "end") {
+    if (s == "end") {
       break;
     }
   }

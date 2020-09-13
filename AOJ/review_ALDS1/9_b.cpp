@@ -3,42 +3,41 @@ using namespace std;
 
 const int MAX = 500005;
 
-void maxHeapify(int A[], int n, int i) {
-  int left_i = 2 * i;
-  int right_i = 2 * i + 1;
-  int largest_i {i};
+int parent(int i) { return i / 2; }
+int left(int i) { return i * 2; }
+int right(int i) { return i * 2 + 1; }
 
-  if (left_i <= n && A[left_i] > A[i]) {
-    largest_i = left_i;
+void maxHeapify(int H[], int h, int r) {
+  int largest = r;
+  if (left(r) <= h && H[largest] < H[left(r)]) {
+    largest = left(r);
   }
-
-  if (right_i <= n && A[right_i] > A[largest_i]) {
-    largest_i = right_i;
+  if (right(r) <= h && H[largest] < H[right(r)]) {
+    largest = right(r);
   }
-
-  if (largest_i != i) {
-    int tmp = A[i];
-    A[i] = A[largest_i];
-    A[largest_i] = tmp;
-    maxHeapify(A, n, largest_i);
+  if (largest != r) {
+    int tmp = H[r];
+    H[r] = H[largest];
+    H[largest] = tmp;
+    maxHeapify(H, h, largest);
   }
 }
 
-void buildMaxHeap(int A[], int n) {
-  for (int i = n / 2; i >= 1; i--) {
-    maxHeapify(A, n, i);
+void buildHeap(int H[], int h) {
+  for (int i = h / 2; i >= 1; i--) {
+    maxHeapify(H, h, i);
   }
 }
 
 int main() {
-  int A[MAX];
-  int h {0};
+  int H[MAX];
+  int h;
   cin >> h;
-  for (int i = 1; i <= h; i++) cin >> A[i];
-  buildMaxHeap(A, h+1);
+  for (int i = 1; i <= h; i++) cin >> H[i];
+  buildHeap(H, h);
+
   for (int i = 1; i <= h; i++) {
-    cout << " " << A[i];
+    cout << " " << H[i];
   }
   cout << endl;
-  return 0;
 }
